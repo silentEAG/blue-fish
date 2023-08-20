@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from crawler.xz import XZCrawler
 
 from sync import BaseSync
 from settings import config
@@ -14,6 +15,7 @@ class XZSync(BaseSync):
 
     def __init__(self):
         super().__init__(baseurl="https://xz.aliyun.com", index_name="xz")
+        self.crawler = XZCrawler
 
 
     def parse_page(self, text):
@@ -44,7 +46,7 @@ class XZSync(BaseSync):
         logger.info("Get fully index to sync '{}'".format(self.index_name))
         
         total_page = self.get_total_page()
-        page_urls = [self.baseurl + "/?page={}".format(x) for x in range(1, 1 + 1)]
+        page_urls = [self.baseurl + "/?page={}".format(x) for x in range(1, total_page + 1)]
         
         get_idx_task = HttpTask(page_urls, self.parse_page_async)
         results = get_idx_task.run_with_blocking()

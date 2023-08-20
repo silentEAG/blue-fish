@@ -41,7 +41,7 @@ class HttpTask:
                 return await self.callback(data)
 
     async def run(self):
-        semaphore = asyncio.Semaphore(3)
+        semaphore = asyncio.Semaphore(5)
         tasks = []
         logger.info("Fetching {} urls".format(len(self.urls)))
         async with aiohttp.ClientSession() as session:

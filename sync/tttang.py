@@ -1,6 +1,7 @@
 
 from bs4 import BeautifulSoup
 
+from crawler.tttang import TTTangCrawler
 from sync import BaseSync
 from settings import config
 from log import logger
@@ -11,6 +12,7 @@ class TTTangSync(BaseSync):
 
     def __init__(self):
         super().__init__(baseurl="https://tttang.com", index_name="tttang")
+        self.crawler = TTTangCrawler
 
     def parse_page(self, text) -> Storage:
 

@@ -4,23 +4,14 @@ import os
 from log import logger
 from settings import config
 from utils import sure
-from crawler.tttang import TTTangCrawler
-from crawler.xz import XZCrawler
 
-"""
-crawler dict
-"""
-crawler = {
-    "tttang": TTTangCrawler,
-    "xz": XZCrawler,
-}
 
 class Index(object):
     def __init__(self, title, url, time, flag):
         self.title = title
         self.url = url
         self.time = time
-        self.flag = flag
+        self.flag = int(flag)
     
     def __eq__(self, other: object) -> bool:
         return self.flag == other.flag
@@ -34,7 +25,7 @@ class StorageEncoder(json.JSONEncoder):
         if isinstance(obj, Storage):
             return {"idx_name": obj.idx_name, "idxs": obj.idxs}
         if isinstance(obj, Index):
-            return {"title": obj.title, "url": obj.url, "time": obj.time, "flag": obj.flag}
+            return {"title": obj.title, "url": obj.url, "time": obj.time, "flag": int(obj.flag)}
         return super().default(obj)
 
 class Storage(object):
@@ -76,8 +67,8 @@ class BaseSync(object):
     def __init__(self, baseurl, index_name) -> None:
         self.baseurl = baseurl
         self.index_name = index_name
+        self.crawler = None
         self.storage: Storage = Storage(self.index_name, [])
-        pass
 
     async def parse_page_async(self, text):
         return self.parse_page(text)
@@ -107,8 +98,7 @@ class BaseSync(object):
     
     def pull(self, remote_storage: Storage):
         logger.info("Pulling {} records".format(len(remote_storage.idxs)))
-        Crawler = crawler[self.index_name]
-        work = Crawler()
+        work = self.crawler()
         urls = [x.url for x in remote_storage.idxs]
         work.run(urls)
         logger.info("Pulling done")

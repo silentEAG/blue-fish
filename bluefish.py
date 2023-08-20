@@ -2,23 +2,30 @@ import argparse
 import time
 
 import args
+from crawler.tttang import TTTangCrawler
+from crawler.xz import XZCrawler
 from settings import config
 from log import logger
 from sync.tttang import TTTangSync
 from sync.xz import XZSync
-from sync import Storage
 
 version = "v0.1.0"
-banner = f"""
-BlueFish {version}
+banner = f"""BlueFish {version}
 """
+
+"""
+sources list
+"""
+sources = {
+    "tttang": TTTangSync,
+    "xz": XZSync,
+}
 
 
 class BlueFish(object):
 
     def __init__(self, arg: argparse.Namespace):
         self.arg = arg
-
 
     def sync(self):
         """
@@ -29,26 +36,20 @@ class BlueFish(object):
 
         syncs = []
 
+        # Set remote sources
         if "all" in config.pull:
-            syncs.append(TTTangSync())
-            syncs.append(XZSync())
+            for v in sources.values():
+                syncs.append(v())
         else:
-            if "tttang" in config.pull:
-                syncs.append(TTTangSync())
-            if "xz" in config.pull:
-                syncs.append(XZSync())
+            for name in config.pull:
+                syncs.append(sources[name]())
 
+        # Run sync
         for sync in syncs:
             sync.run()
 
         end = time.time()
         logger.info("All syncing done in {:.2f}s".format(end - start))
-
-    def crawler(self):
-        """
-        Crawl the web
-        """
-        pass
 
     @staticmethod
     def parse():
@@ -65,9 +66,10 @@ class BlueFish(object):
     @staticmethod
     def version():
         """
-        Print the version of BlueFish
+        The version of BlueFish and remote sources list
         """
-        print(banner)
+        sources_list = 'available remote sources: ' + ', '.join(sources.keys())
+        print(banner + sources_list)
         exit(0)
 
 

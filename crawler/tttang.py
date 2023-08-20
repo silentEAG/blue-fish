@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 
 from crawler import BaseCrawler, converter
-from utils import random_string
 from log import logger
 
 class TTTangCrawler(BaseCrawler):
@@ -19,7 +18,6 @@ class TTTangCrawler(BaseCrawler):
         title = soup.find("h2", class_="mb-3").text
         text = soup.find("div", class_="card-content")
         text = converter.convert_soup(text)
-        path = random_string()
 
         logger.info("Parsing '{}'".format(title))
-        await self.save_to_file(text, title, path)
+        await self.save_to_file(text, title)

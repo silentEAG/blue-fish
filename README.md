@@ -2,7 +2,7 @@
 
 A Crawler with sync and download in local.
 
-Crawl not only the articles content, but aslo the images included. Save as markdown file for local search.With index file, we can sync the remote data and update the new articles.
+Crawl not only the articles content, but also the images included. Save as markdown file for local search.With index file, we can sync the remote data and update the new articles.
 
 ```text
 usage: BlueFish [-h] [-v] [-f] [--pull PULL] [--proxy PROXY]
@@ -11,9 +11,9 @@ BlueFish - A simple tool for sync and download with crawlers
 
 options:
   -h, --help     show this help message and exit
-  -v, --version  Print the version of BlueFish
+  -v, --version  Print the version of BlueFish and remote sources list
   -f, --force    Force to pull all of remote data
-  --pull PULL    Pull which the remote data
+  --pull PULL    Pull which the remote data, default is all
   --proxy PROXY  Set the proxy for BlueFish
 ```
 
@@ -32,12 +32,12 @@ Python >= 3.10.x
 pip install -r requirements.txt
 python bluefish.py --help
 
-# for example
+# First time to pull the remote data which you are interested in
+# And use the same command to sync the remote data
 python bluefish.py --pull xz,tttang --force --proxy socks5://username:pass@127.0.0.1:1080
-
 ```
 
-index file is auto generated, pls **don't modify** it.
+index file is auto generated, pls **Don't Modify** it.
 
 ## Speed
 
@@ -86,11 +86,11 @@ class XZCrawler(BaseCrawler):
 
 ```
 
-3. Add to `main.py`:
+3. Add to `bluefish.py`:
 
 ```python
-crawler = {
-    "xz": XZCrawler,
+sources = {
+    "tttang": XZSync,
     ...
 }
 ```

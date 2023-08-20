@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 
 from crawler import BaseCrawler, converter
-from utils import random_string
 from log import logger
 
 class XZCrawler(BaseCrawler):
@@ -28,8 +27,6 @@ class XZCrawler(BaseCrawler):
         text.find("div", class_="clearfix user-info topic-list").decompose()
         text.find("div", class_="related-section").decompose()
         text = converter.convert_soup(text)
-        path = random_string()
-
         
         logger.info("Parsing '{}'".format(title))
-        await self.save_to_file(text, title, path)
+        await self.save_to_file(text, title)
