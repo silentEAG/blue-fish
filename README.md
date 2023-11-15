@@ -38,6 +38,7 @@ python bluefish.py --help
 python bluefish.py --pull xz,tttang --force --proxy socks5://username:pass@127.0.0.1:1080 --path ../
 ```
 the name of the folders under dist ends with the date you get the articles
+
 `tree data -L 2`
 ```text
 data
