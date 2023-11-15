@@ -13,6 +13,7 @@ options:
   -h, --help     show this help message and exit
   -v, --version  Print the version of BlueFish and remote sources list
   -f, --force    Force to pull all of remote data
+  -p PATH, --path PATH  Set save path
   --pull PULL    Pull which the remote data, default is all
   --proxy PROXY  Set the proxy for BlueFish
 ```
@@ -34,7 +35,18 @@ python bluefish.py --help
 
 # First time to pull the remote data which you are interested in
 # And use the same command to sync the remote data
-python bluefish.py --pull xz,tttang --force --proxy socks5://username:pass@127.0.0.1:1080
+python bluefish.py --pull xz,tttang --force --proxy socks5://username:pass@127.0.0.1:1080 --path ../
+```
+the name of the folders under dist ends with the date you get the articles
+`tree data -L 2`
+```text
+data
+|-- dist
+|   |-- tttang-2023-11-15
+|   `-- xz-2023-11-15
+`-- index
+    |-- tttang.idx
+    `-- xz.idx
 ```
 
 index file is auto generated, pls **Don't Modify** it.

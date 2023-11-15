@@ -10,7 +10,7 @@ from task import HttpTask
 from log import logger
 from utils import get_random_proxy
 
-img_regex = re.compile(r"!\[[^\]]*\]\((.*?)\)")
+img_regex = re.compile(r"!\[[^\]]*\]\((.*?)(#.*?)?\)")
 converter = markdownify.MarkdownConverter()
 
 
@@ -41,7 +41,7 @@ class BaseCrawler(object):
         """
         try:
             async with session.get(img_url, headers=self.headers, proxy=config.proxy) as resp:
-                img_path = os.path.join(config.dist_dir, self.name, "pic", rng_path, os.path.basename(img_url))
+                img_path = os.path.join(config.save_path + config.dist_dir, self.name, "pic", rng_path, os.path.basename(img_url))
                 with open(img_path, 'wb') as f:
                     f.write(await resp.content.read())
         except Exception as e:
@@ -52,8 +52,8 @@ class BaseCrawler(object):
         Save the markdown text to file
         """
         rng_path = hashlib.sha256(title.encode()).hexdigest()[:24]
-        os.makedirs(os.path.join(config.dist_dir, self.name, "pic", rng_path), exist_ok=True)
-        img_urls = img_regex.findall(text)
+        os.makedirs(os.path.join(config.save_path + config.dist_dir, self.name, "pic", rng_path), exist_ok=True)
+        img_urls = [i[0] for i in img_regex.findall(text)]
 
         async with aiohttp.ClientSession() as session:
             tasks = [asyncio.create_task(self.download_img(img_url, rng_path, session)) for img_url in img_urls]
@@ -68,7 +68,7 @@ class BaseCrawler(object):
         text = img_regex.sub(repl, text)
         
 
-        with open(os.path.join(config.dist_dir, self.name, safe_filename(title) + ".md"), 'w', encoding="utf-8") as f:
+        with open(os.path.join(config.save_path + config.dist_dir, self.name, safe_filename(title) + ".md"), 'w', encoding="utf-8") as f:
             f.write(text)
         logger.debug("Saved '{}'".format(title))
 

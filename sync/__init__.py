@@ -42,12 +42,12 @@ class Storage(object):
         pass
 
     def save(self):
-        with open(os.path.join(config.index_dir, self.idx_name + ".idx"), 'w', encoding="utf-8") as f:
+        with open(os.path.join(config.save_path + config.index_dir, self.idx_name + ".idx"), 'w', encoding="utf-8") as f:
             f.write(json.dumps(self, cls=StorageEncoder, ensure_ascii = False))
     
     @staticmethod
     def load_from_local(idx_name: str):
-        with open(os.path.join(config.index_dir, idx_name + ".idx"), 'r', encoding="utf-8") as f:
+        with open(os.path.join(config.save_path + config.index_dir, idx_name + ".idx"), 'r', encoding="utf-8") as f:
             return json.loads(f.read(), object_hook=Storage.from_dict)
 
     @classmethod
@@ -104,8 +104,8 @@ class BaseSync(object):
         logger.info("Pulling done")
 
     def get_local_storage(self) -> (Storage, Index):
-        if not os.path.exists(config.index_dir):
-            os.mkdir(config.index_dir)
+        if not os.path.exists(config.save_path + config.index_dir):
+            os.makedirs(config.save_path + config.index_dir)
         try:
             storage: Storage = Storage.load_from_local(self.index_name)
             logger.info("Local index: {} records".format(len(storage.idxs)))
