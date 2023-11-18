@@ -1,3 +1,4 @@
+import time
 from bs4 import BeautifulSoup
 
 from crawler import BaseCrawler, converter
@@ -5,7 +6,7 @@ from log import logger
 
 class XZCrawler(BaseCrawler):
 
-    def __init__(self, name = "xz"):
+    def __init__(self, name = "xz" + time.strftime("-%Y-%m-%d",time.localtime())):
         super().__init__(name)
         self.headers = {
             "Cache-Control": "no-cache",

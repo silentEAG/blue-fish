@@ -1,11 +1,12 @@
 from bs4 import BeautifulSoup
+import time
 
 from crawler import BaseCrawler, converter
 from log import logger
 
 class TTTangCrawler(BaseCrawler):
 
-    def __init__(self, name = "tttang"):
+    def __init__(self, name = "tttang" + time.strftime("-%Y-%m-%d",time.localtime())):
         super().__init__(name)
     
 
