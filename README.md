@@ -50,7 +50,11 @@ data
     `-- xz.idx
 ```
 
-index file is auto generated, pls **Don't Modify** it.
+index file is auto generated, pls **Don't Modify** it
+
+## Note
+
+Suggest to run on Linux, and with the access to the global network :)
 
 ## Speed
 
