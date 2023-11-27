@@ -41,7 +41,7 @@ class BaseCrawler(object):
         """
         try:
             async with session.get(img_url, headers=self.headers, proxy=config.proxy) as resp:
-                img_path = os.path.join(config.save_path + config.dist_dir, self.name, "pic", rng_path, os.path.basename(img_url))
+                img_path = os.path.join(config.save_path + config.dist_dir, self.name, "pic", rng_path, safe_filename(os.path.basename(img_url)))
                 with open(img_path, 'wb') as f:
                     f.write(await resp.content.read())
         except Exception as e:
@@ -62,7 +62,7 @@ class BaseCrawler(object):
 
         def repl(match):
             img_url = match.group(1)
-            img_path = os.path.join("pic", rng_path, os.path.basename(img_url))
+            img_path = os.path.join("pic", rng_path, safe_filename(os.path.basename(img_url)))
             return f"![]({img_path})"
         
         text = img_regex.sub(repl, text)
