@@ -65,7 +65,7 @@ Also there is a unsolved problem: [Received "Response payload is not completed" 
 
 So, I set `semaphore = asyncio.Semaphore(3)` try to avoid it.
 
-test tttang.com (1580 articles), time costs 1078.92s (about 18min, 0.68s per article)
+test tttang.com (1580 articles), time costs 877.40s (about 15min, 0.55s per article)
 
 ## Add your own source:
 
@@ -107,7 +107,7 @@ class XZCrawler(BaseCrawler):
 
 ```python
 sources = {
-    "tttang": XZSync,
+    "xz": XZSync,
     ...
 }
 ```
