@@ -1,6 +1,7 @@
 import markdownify
 import re
 import os
+import ssl
 import asyncio
 import aiohttp
 import hashlib
@@ -55,7 +56,12 @@ class BaseCrawler(object):
         os.makedirs(os.path.join(config.save_path + config.dist_dir, self.name, "pic", rng_path), exist_ok=True)
         img_urls = [i[0] for i in img_regex.findall(text)]
 
-        async with aiohttp.ClientSession() as session:
+        # ignore ssl error
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl_context=ssl_context)) as session:
             tasks = [asyncio.create_task(self.download_img(img_url, rng_path, session)) for img_url in img_urls]
             if len(tasks) > 0:
                 await asyncio.wait(tasks)
