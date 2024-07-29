@@ -1,5 +1,7 @@
 # Blue Fish
 
+**Note: devloping new crawler, pls visit: https://github.com/silentEAG/black-fish**
+
 A Crawler with sync and download in local.
 
 Crawl not only the articles content, but also the images included. Save as markdown file for local search.With index file, we can sync the remote data and update the new articles.
